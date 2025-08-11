@@ -9,3 +9,9 @@
 *{
     font-family: Outfit;
 }
+
+.placeholder-color{                
+    /* Placeholder Class Made by ourself Cutom used in Result page */
+    color: #e0e0e0;
+    font-weight:300;
+}

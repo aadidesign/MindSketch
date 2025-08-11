@@ -1,9 +1,15 @@
 import React from 'react'
 import { testimonialsData, assets } from '../assets/assets'          // Assuming testimonialsData is an array of testimonial objects with name, image, and text from assets.js
+import { motion } from "framer-motion"
 
 function Testimonials() {
   return (
-    <div className='flex flex-col items-center justify-center my-20 py-12'> 
+    <motion.div
+    initial={{opacity:0.2, y:100}}
+    transition={{duration:1}}
+    whileInView={{opacity:1, y:0}}
+    viewport={{once:true}} 
+    className='flex flex-col items-center justify-center my-20 py-12'> 
     <h1 className='text-3xl sm:text-4xl font-semibold mb-2'>
         Customer Testimonials
     </h1>
@@ -29,7 +35,7 @@ function Testimonials() {
         ))}
     </div>
 
-    </div>   // Copied the Classname from Description.jsx and modified the content
+    </motion.div>   // Copied the Classname from Description.jsx and modified the content
   )
 }
 

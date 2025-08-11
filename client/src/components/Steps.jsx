@@ -1,9 +1,15 @@
 import React from 'react'
 import {stepsData} from '../assets/assets' // Assuming Steps is an array of step objects with title and description
+import {motion} from "framer-motion"
 
 function Steps() {
   return (
-    <div className='flex flex-col items-center justify-center my-32'>
+    <motion.div 
+    initial={{opacity:0.2, y:100}}
+    transition={{duration:1}}
+    whileInView={{opacity:1, y:0}}
+    viewport={{once:true}}          // Ensures the animation runs only once when the component comes into view I.e. after scrolling to the component
+    className='flex flex-col items-center justify-center my-32'>
         <h1 className='text-3xl sm:text-4xl font-semibold mb-2'>
             How it works
         </h1>
@@ -23,7 +29,7 @@ function Steps() {
                 </div>
             ))}
         </div>
-    </div>
+    </motion.div>
   )
 }
 
