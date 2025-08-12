@@ -40,13 +40,14 @@ const loginUser = async (req, res) => {
         const user = await userModel.findOne({email})
 
         if (!user){
-            return res.json({success: false, message: 'User not found'})
+            return res.json({success: false, message: 'User does not exist'})
         }
 
         const isMatch = await bcrypt.compare(password, user.password)
 
         if(isMatch){
             const token = jwt.sign({id: user._id}, process.env.JWT_SECRET)
+            return res.json({success: true, token, user: {name: user.name}})
         } else{
             return res.json({success: false, message: 'Invalid Credentials'})
         }
@@ -57,5 +58,19 @@ const loginUser = async (req, res) => {
     }
 }
 
+    const userCredits = async (req, res) => {
+        try{
+            const userId = req.userId;
+            const user = await userModel.findById(userId)
+            if(!user){
+                return res.json({success: false, message: 'User not found'})
+            }
+            res.json({success: true, credits: user.creditBalance, user: {name: user.name}})
 
-export {registerUser, loginUser};
+        } catch(error){
+            console.log(error.message)
+            res.json({success: false, message: error.message})
+        }
+    }
+
+export {registerUser, loginUser, userCredits};
