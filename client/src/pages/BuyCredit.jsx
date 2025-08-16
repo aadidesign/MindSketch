@@ -1,12 +1,36 @@
-import { assets, plans } from "../assets/assets"; // Assuming assets.js contains the necessary image assets
+import { assets, plans } from "../assets/assets";
 import React, {useContext} from "react";
-import { AppContext } from "../context/AppContext"; // Assuming AppContext is defined in context/AppContext.jsx
+import { AppContext } from "../context/AppContext";
+import axios from 'axios';
 import {motion} from "framer-motion";
 
 
 function BuyCredit() {
 
-  const {user} = useContext(AppContext);
+  const {user, token, backendUrl} = useContext(AppContext);
+
+  const purchase = async (planId) => {
+    try{
+      if(!token) {
+        alert('Please login first');
+        return;
+      }
+      
+      const {data} = await axios.post(
+        `${backendUrl}/api/billing/create-checkout-session`,
+        { planId },
+        { headers: { token } }
+      );
+      if(data.success && data.url){
+        window.location.href = data.url;
+      } else {
+        alert('Failed to create checkout session');
+      }
+    }catch(err){
+      console.log(err);
+      alert('Error: ' + (err.response?.data?.message || err.message));
+    }
+  }
 
   return (
     <motion.div 
@@ -27,7 +51,7 @@ function BuyCredit() {
           <p className="text-sm">{item.desc}</p>
           <p className="mt-6">
             <span className="text-3xl font-medium">${item.price}</span> /{item.credits} credits</p>
-          <button className="w-full bg-gray-800 text-white mt-8 text-sm rounded-md py-2.5 min-w-52">{user?'Purchase':'Get Started'}</button>
+          <button onClick={()=>purchase(item.id)} className="w-full bg-gray-800 text-white mt-8 text-sm rounded-md py-2.5 min-w-52">{user?'Purchase':'Get Started'}</button>
         </div>
 
       ))}
